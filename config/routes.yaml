@@ -1,3 +1,32 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: App\Controller\CategoryController::view
+
+category_view:
+    path: /category/{slug}
+    controller: App\Controller\CategoryController::view
+
+category_view_page:
+    path: /category/{slug}/page/{page}
+    controller: App\Controller\CategoryController::view
+    requirements:
+        page: '\d+'
+
+topic_view:
+    path: /category/{slug}/topic/{topicID}
+    controller: App\Controller\TopicController::view
+    requirements:
+        topicID: '\d+'
+
+topic_view_page:
+    path: /category/{slug}/topic/{topicID}/page/{page}
+    controller: App\Controller\TopicController::view
+    requirements:
+        topicID: '\d+'
+        page: '\d+'
+
+
+when@dev:
+    _pomm:
+        resource: "@PommBundle/Resources/config/routing.yml"
+        prefix: /_pomm

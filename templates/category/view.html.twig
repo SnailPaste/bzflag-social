@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-md mt-3">
+        <h1>{% if category %}{{ category.name }}{% else %}Index{% endif %}</h1>
+
+        {% for childCategory in childCategories %}
+            {%if loop.first %}
+            <div class="row mt-3">
+                <div class="col-md-8 col-12 border bg-dark text-light"><strong>Categories</strong></div>
+                <div class="col-md-2 col-6 border bg-dark text-light text-center"><strong>Topics</strong></div>
+                <div class="col-md-2 col-6 border bg-dark text-light text-center"><strong>Posts</strong></div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-8 col-12 border">
+                    <a href="{{ path('category_view', {slug: childCategory.slug}) }}">{{ childCategory.name }}</a>{% if childCategory.description is not empty %}<br />
+                    {{ childCategory.description }}{% endif %}
+                </div>
+                <div class="col-md-2 col-6 border text-center">{{ childCategory.topics }}</div>
+                <div class="col-md-2 col-6 border text-center">{{ childCategory.posts }}</div>
+            </div>
+        {% endfor %}
+
+
+        {# Do not show posts on the index page #}
+        {% if category %}
+        <div class="row mt-3">
+            <div class="col-md-7 col-12 border bg-dark text-light"><strong>Topics</strong></div>
+            <div class="col-md-1 col-2 border bg-dark text-light text-center"><strong>Replies</strong></div>
+            <div class="col-md-1 col-2 border bg-dark text-light text-center"><strong>Views</strong></div>
+            <div class="col-md-3 col-8 border bg-dark text-light"><strong>Last Reply</strong></div>
+        </div>
+        {% for topic in topics %}
+            <div class="row">
+                <div class="col-md-7 col-12 border">
+                    <a href="{{ path('topic_view', {slug:category.slug, topicID: topic.id}) }}">{{ topic.title }}</a><br />
+                    by {{ topic.author_name }} &raquo; {{ topic.when_created | format_datetime(locale=forum.locale, timezone=forum.timeZone) }}
+                </div>
+                <div class="col-md-1 col-2 border text-center">0</div>
+                <div class="col-md-1 col-2 border text-center">0</div>
+                <div class="col-md-3 col-8 border">{% if topic.last_reply is not null %}by {{ topic.last_reply_author_name }}<br />{{ topic.last_reply | format_datetime(locale=forum.locale, timezone=forum.timeZone) }}{% else %}No replies{% endif %}</div>
+            </div>
+        {% else%}
+            <div class="row">
+                <div class="col-12 border">There are no topics in this category</div>
+            </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

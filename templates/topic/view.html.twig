@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-md mt-3">
+        <h1>{{ category.name }}</h1>
+        <h2>{{ topic.title }}</h2>
+
+        {% for post in posts %}
+            <div class="row mb-3">
+                <div class="col-md-9 col-12 py-1 border">
+                    by {{ post.author_name }} &raquo; {{ post.when_created | format_datetime(locale=forum.locale, timezone=forum.timeZone) }}<br />
+                    {{ post.body_xml | tfxml_to_html }}
+                    {% if post.author_has_signature %}
+                    <hr />
+                    {{ post.author_signature_xml | tfxml_to_html }}
+                    {% endif %}
+                </div>
+                <div class="col-md-3 col-12 py-1 border">
+                    <strong>{{ post.author_name }}</strong><br />
+                    Posts: {{ post.author_posts}}<br />
+                    Registered: {{ post.author_registration_date | format_datetime(locale=forum.locale, timezone=forum.timeZone) }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
